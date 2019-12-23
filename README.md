@@ -9,21 +9,13 @@ The role is meant to be applied directly on the ansible server
 This role will install :
 
 -policycoreutils-python
-
 -rabbitmq-server
-
 -rh-git29
-
 -postgresql10 (server/contrib/libs)
-
 -rh-postgresql10
-
 -memcached
-
 -nginx
-
 -rh-python36
-
 -ansible-awx
 
 
@@ -51,7 +43,9 @@ Requirements
 ------------
 
 -Ansible
+
 -Epel-Release
+
 -Internet Connection
 
 Role Variables
