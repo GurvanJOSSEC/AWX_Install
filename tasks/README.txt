@@ -9,7 +9,7 @@ Each task is labbeled and you'll also find repos and nginx configuration in the 
 
 You'll need to place the folder "AWX_Install" in /etc/ansible/roles/ for this to work. If your ansible folder is located somewhere else just mkdir /etc/ansible/roles.
 
-/!\ SECURITY WARNING: Do not forget to edit "7-awx.yml" to include your username and password (line 19) otherwise you'll have default "admin" user and "password". /!\
+/!\ SECURITY WARNING: Do not forget to edit "7-awx.yml" (line 19) or "main.yml" (l 171) to include your username and password  otherwise you'll have default "admin" user and "password". /!\
 
 This might be added as a var in the future.
 
