@@ -1,4 +1,4 @@
-Role Name
+AWX_Install (Dockerless, automated installation of AWX)
 =========
 
 This role helps you Install a dockerless AWX server using ansible. 
@@ -15,6 +15,10 @@ This role will install :
 -rh-python36
 -ansible-awx
 
+/!\ SECURITY WARNING /!\ 
+
+You need to change the password and username in main.yml (line 171) or in 7-Awx.yml (l 19) 
+Otherwise the default (admin/password) will be used. 
 
 Requirements
 ------------
@@ -50,3 +54,7 @@ Infrastructure Engineer
 
 https://github.com/GurvanJOSSEC/
 https://www.linkedin.com/in/gurvan-jossec/
+
+Special thanks to MrMeee and Waderni Lotfi for their contribution to AWX. 
+
+Instructions to install AWX (dockerless) : https://raw.githubusercontent.com/faudeltn/AnsibleTower-awx/master/ansible-awx-install/install-awx
