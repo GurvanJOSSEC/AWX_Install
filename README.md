@@ -4,6 +4,8 @@ AWX_Install (Dockerless, automated installation of AWX)
 This role helps you Install a dockerless AWX server using ansible. 
 The role is meant to be applied directly on the ansible server 
 
+
+
 This role will install :
 
 -policycoreutils-python
@@ -24,7 +26,10 @@ This role will install :
 
 -ansible-awx
 
+
+
 You'll need to place the folder "AWX_Install" in /etc/ansible/roles/ for this to work. If your ansible folder is located somewhere else just mkdir /etc/ansible/roles.
+
 
 Then run the command : 
 
@@ -33,6 +38,8 @@ ansible-playbook /etc/ansible/roles/AWX_Install/tasks/main.yml
 You can also run parts specific tasks : 
 
 ansible-playbook /etc/ansible/roles/AWX_Install/tasks/1-AWX_repo_dependancies.yml
+
+
 
 
 /!\ SECURITY WARNING /!\ :
