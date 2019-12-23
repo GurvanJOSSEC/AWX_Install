@@ -1,7 +1,14 @@
-# AWX_Install
+# AWX_Install (Dockerless and with Ansible) 
+
 Install AWX on CentOS without Docker with this simple Ansible role. 
 
-Each task is labbeled and you'll also find repo and nginx configuration in the template folders. 
+Prerequisite : 
+-ansible
+-epel-release
+-internet connection
+
+
+Each task is labbeled and you'll also find repos and nginx configuration in the template folders. 
 
 You'll need to place the folder "AWX_Install" in /etc/ansible/roles/ for this to work.
 
@@ -20,4 +27,6 @@ https://raw.githubusercontent.com/faudeltn/AnsibleTower-awx/master/ansible-awx-i
 
 My contribution is just a simple Ansible script to install AWX and it's dependencies so you don't have to. 
 
-Special thanks to Mrmeee and Warden Lofti for their contributions.
+
+
+Special thanks to Mrmeee and Warden Lofti for their contributions to AWX. 
