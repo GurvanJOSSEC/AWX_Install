@@ -48,4 +48,5 @@ Author Information
 Gurvan JOSSEC
 Infrastructure Engineer 
 
-https://github.com/GurvanJOSSEC/AWX_Install/
+https://github.com/GurvanJOSSEC/
+https://www.linkedin.com/in/gurvan-jossec/
