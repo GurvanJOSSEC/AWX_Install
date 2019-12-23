@@ -1,0 +1,194 @@
+---
+
+#AWX_Install
+# By Gurvan JOSSEC
+#
+
+- hosts: localhost
+  tasks:
+  
+  - name: Installation des dependances
+    yum:
+      name:
+        - "policycoreutils-python"
+        - "epel-release"
+        - "wget"
+      state: present 
+      
+  - name: Autorisation du traffic tcp 8050 a 8052
+    seport:
+      ports: 8050-8052
+      proto: tcp
+      setype: http_port_t
+      state: present
+  
+  - name: httpd_can_network flag 
+    seboolean: 
+      name: httpd_can_network_connect
+      state: yes
+      persistent: yes
+      
+  - name: Firewall rule
+    firewalld:
+      service: http
+      permanent: yes
+      state: enabled
+
+  - name: Installation des dependances
+    yum:
+      name:
+        - "centos-release-scl"
+        - "centos-release-scl-rh"
+      state: present 
+
+  - name: Copie du repository AWX
+    copy:
+      src: "/etc/ansible/roles/AWX_Install/templates/awx-rpm.repo"
+      dest: "/etc/yum.repos.d/awx-rpm.repo"
+      
+  - name: Copie du repository RabbitMQ 
+    copy:
+      src: "/etc/ansible/roles/AWX_Install/templates/rabbitmq.repo"
+      dest: "/etc/yum.repos.d/rabbitmq.repo"
+
+  - name: Copie du repository Erlang
+    copy:
+      src: "/etc/ansible/roles/AWX_Install/templates/rabbitmq-erlang.repo"
+      dest: "/etc/yum.repos.d/rabbitmq-erlang.repo"
+
+  - name: Installation RabbitMQ
+    yum:
+      name:
+        - "rabbitmq-server"
+        - "rh-git29"
+      state: present 
+  - name: Lancement des services RabbitMQ
+    service: 
+      name: "rabbitmq-server"
+      state: started
+      enabled: yes
+
+  - name: Installation de POSTGRESQL10
+    yum:
+      name:
+        - "https://download.postgresql.org/pub/repos/yum/10/redhat/rhel-7.3-x86_64/pgdg-redhat10-10-2.noarch.rpm"
+      state: present 
+
+  - name: Installation de POSTGRESQL10-SRV
+    yum:
+      name:
+        - "postgresql10"
+        - "postgresql10-server"
+        - "postgresql10-contrib"
+        - "postgresql10-libs"
+        - "rh-postgresql10"
+      state: present 
+      
+  - name: Initialisation de la Database POSTGRESQL10
+    command: "/usr/pgsql-10/bin/postgresql-10-setup initdb"
+    
+  - name: Mise en fonctionnement de la Database
+    service: 
+      enabled: yes
+      name: "postgresql-10.service"
+    
+  - name: Mise en fonctionnement de la Database
+    service: 
+      state: started
+      name: "postgresql-10.service"
+      
+####          NOT WORKING CURRENTLY  WORKING ON IT
+#  - name: Création d'un utilisateur Database AWX
+#    postgresql_user:
+#      name: "awx"
+#     
+#  - name: Création d'une database AWX
+#    postgresql_db:
+#      name: "awx"
+#      owner: "awx"
+####
+  - name: Création d'un utilisateur Database AWX
+    command: "sudo -u postgres createuser -S awx"
+
+      
+  - name: Création d'une database AWX
+    command: "sudo -u postgres createdb -O awx awx"
+
+  - name: Installation Memcached
+    yum:
+      name:
+        - "memcached"
+      state: present 
+  - name: Lancement des services Memcached
+    service: 
+      name: "memcached"
+      state: started
+      enabled: yes
+  - name: Installation de NGINX
+    yum:
+      name: "nginx"
+      state: present
+      
+  - name: Copie du fichier de configuration NGINX
+    copy:
+      src: "/etc/ansible/roles/AWX_Install/templates/nginx.conf"
+      dest: "/etc/nginx/nginx.conf"
+      
+  - name: Lancement des services NGINX
+    service: 
+      name: "nginx"
+      state: restarted
+      enabled: yes
+      
+  - name: Installation des dépendances Python36
+    yum: 
+      name: 
+      - rh-python36
+      - rh-postgresql10-postgresql-devel
+      - bubblewrap
+      - rh-python36-runtime
+      - rh-python36-python
+      - rh-python36-build
+      - rh-python36-scldevel
+      state: present
+
+  - name: Installation des dépendances AWX
+    command: yum -y install --disablerepo='*' --enablerepo='mrmeee-ansible-awx, base' *-debuginfo 
+    command: yum -y install --disablerepo='*' --enablerepo='mrmeee-ansible-awx, base' rh-python36*
+      
+  - name: Installation d'AWX
+    yum: 
+      name: 
+      - "ansible-awx"
+      state: present
+      disablerepo: "*"
+      enablerepo: "mrmeee-ansible-awx, base"
+
+  - name: Initialisation AWX
+    command: sudo -u awx scl enable rh-python36 rh-postgresql10 rh-git29 "GIT_PYTHON_REFRESH=quiet awx-manage migrate"
+    
+  - name: Création utilisateurs AWX
+    command: echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'root@localhost', 'password')" | sudo -u awx scl enable rh-python36 rh-postgresql10 "GIT_PYTHON_REFRESH=quiet awx-manage shell"
+
+  - name: Initialisation database AWX
+    command: sudo -u awx scl enable rh-python36 rh-postgresql10 rh-git29 "GIT_PYTHON_REFRESH=quiet awx-manage create_preload_data"
+
+  - name: Provision database AWX
+    command: sudo -u awx scl enable rh-python36 rh-postgresql10 rh-git29 "GIT_PYTHON_REFRESH=quiet awx-manage provision_instance --hostname=$(hostname)"
+
+  - name: Register AWX
+    command: sudo -u awx scl enable rh-python36 rh-postgresql10 rh-git29 "GIT_PYTHON_REFRESH=quiet awx-manage register_queue --queuename=tower --hostnames=$(hostname)"
+
+  - name: Démmarer les services AWX
+    service:
+      name: awx
+      state: started
+      enabled: yes
+      
+  - name: Authorisation HTTP pour le firewall 
+    firewalld:
+      service: http
+      permanent: yes
+      state: enabled
+  - name: Firewall activation
+    command: "firewall-cmd --reload"

@@ -1,33 +1,38 @@
-# AWX_Install (Dockerless and with Ansible) 
+Role Name
+=========
 
-Install AWX on CentOS without Docker with this simple Ansible role. 
+A brief description of the role goes here.
 
-Prerequisite : 
--ansible
--epel-release
--internet connection
+Requirements
+------------
 
-You just have to run : 
+Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
 
-ansible-playbook main.yml
+Role Variables
+--------------
 
-Each task is labbeled so you can run them one by one and you'll also find repos and nginx configuration in the template folders. 
+A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
 
-You'll need to place the folder "AWX_Install" in /etc/ansible/roles/ for this to work.
-If your ansible folder is located somewhere else just mkdir /etc/ansible/roles. 
+Dependencies
+------------
 
+A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
 
+Example Playbook
+----------------
 
-/!\ SECURITY WARNING: Do not forget to edit "7-awx.yml" (line 19) or "main.yml" (l 171)  to include your username and password  otherwise you'll have default "admin" user and "password". /!\
+Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
-This might be added as a var in the future. 
+    - hosts: servers
+      roles:
+         - { role: username.rolename, x: 42 }
 
+License
+-------
 
-Instructions to install AWX without docker can be found here :
-https://raw.githubusercontent.com/faudeltn/AnsibleTower-awx/master/ansible-awx-install/install-awx
+BSD
 
-My contribution is just a simple Ansible script to install AWX and it's dependencies so you don't have to. 
+Author Information
+------------------
 
-
-
-Special thanks to Mrmeee and Warden Lofti for their contributions to AWX. 
+An optional section for the role authors to include contact information, or a website (HTML is not allowed).

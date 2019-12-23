@@ -1,0 +1,14 @@
+---
+
+- hosts: localhost
+  tasks:
+  - name: Installation Memcached
+    yum:
+      name:
+        - "memcached"
+      state: present 
+  - name: Lancement des services Memcached
+    service: 
+      name: "memcached"
+      state: started
+      enabled: yes

@@ -1,0 +1,19 @@
+---
+
+- hosts: localhost
+  tasks:
+  - name: Installation de NGINX
+    yum:
+      name: "nginx"
+      state: present
+      
+  - name: Copie du fichier de configuration NGINX
+    copy:
+      src: "/etc/ansible/roles/AWX_Install/templates/nginx.conf"
+      dest: "/etc/nginx/nginx.conf"
+      
+  - name: Lancement des services NGINX
+    service: 
+      name: "nginx"
+      state: restarted
+      enabled: yes

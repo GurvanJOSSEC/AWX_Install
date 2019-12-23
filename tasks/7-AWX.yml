@@ -1,0 +1,41 @@
+---
+
+- hosts: localhost
+  tasks:
+  
+  - name: Installation d'AWX
+    yum: 
+      name: 
+      - "ansible-awx"
+      state: present
+      disablerepo: "*"
+      enablerepo: "mrmeee-ansible-awx, base"
+
+  - name: Initialisation AWX
+    command: sudo -u awx scl enable rh-python36 rh-postgresql10 rh-git29 "GIT_PYTHON_REFRESH=quiet awx-manage migrate"
+    
+  - name: Création utilisateurs AWX
+    command: echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'root@localhost', 'password')" | sudo -u awx scl enable rh-python36 rh-postgresql10 "GIT_PYTHON_REFRESH=quiet awx-manage shell"
+
+  - name: Initialisation database AWX
+    command: sudo -u awx scl enable rh-python36 rh-postgresql10 rh-git29 "GIT_PYTHON_REFRESH=quiet awx-manage create_preload_data"
+
+  - name: Provision database AWX
+    command: sudo -u awx scl enable rh-python36 rh-postgresql10 rh-git29 "GIT_PYTHON_REFRESH=quiet awx-manage provision_instance --hostname=$(hostname)"
+
+  - name: Register AWX
+    command: sudo -u awx scl enable rh-python36 rh-postgresql10 rh-git29 "GIT_PYTHON_REFRESH=quiet awx-manage register_queue --queuename=tower --hostnames=$(hostname)"
+
+  - name: Démmarer les services AWX
+    service:
+      name: awx
+      state: started
+      enabled: yes
+      
+  - name: Authorisation HTTP pour le firewall 
+    firewalld:
+      service: http
+      permanent: yes
+      state: enabled
+  - name: Firewall activation
+    command: "firewall-cmd --reload"

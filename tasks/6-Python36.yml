@@ -1,0 +1,33 @@
+---
+
+- hosts: localhost
+  tasks:
+  - name: Installation des dépendances Python36
+    yum: 
+      name: 
+      - rh-python36
+      - rh-postgresql10-postgresql-devel
+      - bubblewrap
+      - rh-python36-runtime
+      - rh-python36-python
+      - rh-python36-build
+      - rh-python36-scldevel
+      state: present
+
+  - name: Installation des dépendances AWX
+    command: yum -y install --disablerepo='*' --enablerepo='mrmeee-ansible-awx, base' *-debuginfo 
+    command: yum -y install --disablerepo='*' --enablerepo='mrmeee-ansible-awx, base' rh-python36*
+
+#  - name: Installation des dépendances de Python36
+#    yum: 
+#      name: rh-python36*
+#      state: present
+#      disablerepo: "*"
+#      enablerepo: "mrmeee-ansible-awx"
+
+#  - name: Installation des dépendances de debuginfo
+#    yum: 
+#      name: *-debuginfo
+#      state: present
+#      disablerepo: "*"
+#      enablerepo: "mrmeee-ansible-awx"

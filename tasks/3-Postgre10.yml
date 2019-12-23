@@ -1,0 +1,52 @@
+---
+
+- hosts: localhost
+  tasks:
+  - name: Installation de POSTGRESQL10
+    yum:
+      name:
+        - "https://download.postgresql.org/pub/repos/yum/10/redhat/rhel-7.3-x86_64/pgdg-redhat10-10-2.noarch.rpm"
+      state: present 
+
+  - name: Installation de POSTGRESQL10-SRV
+    yum:
+      name:
+        - "postgresql10"
+        - "postgresql10-server"
+        - "postgresql10-contrib"
+        - "postgresql10-libs"
+        - "rh-postgresql10"
+      state: present 
+      
+  - name: Initialisation de la Database POSTGRESQL10
+    command: "/usr/pgsql-10/bin/postgresql-10-setup initdb"
+    
+  - name: Mise en fonctionnement de la Database
+    service: 
+      enabled: yes
+      name: "postgresql-10.service"
+    
+  - name: Mise en fonctionnement de la Database
+    service: 
+      state: started
+      name: "postgresql-10.service"
+      
+####          NOT WORKING CURRENTLY  WORKING ON IT
+#  - name: Création d'un utilisateur Database AWX
+#    postgresql_user:
+#      name: "awx"
+#     
+#  - name: Création d'une database AWX
+#    postgresql_db:
+#      name: "awx"
+#      owner: "awx"
+####
+  - name: Création d'un utilisateur Database AWX
+    command: "sudo -u postgres createuser -S awx"
+
+      
+  - name: Création d'une database AWX
+    command: "sudo -u postgres createdb -O awx awx"
+
+
+

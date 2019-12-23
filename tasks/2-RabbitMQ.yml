@@ -1,0 +1,16 @@
+
+---
+
+- hosts: localhost
+  tasks:
+  - name: Installation RabbitMQ
+    yum:
+      name:
+        - "rabbitmq-server"
+        - "rh-git29"
+      state: present 
+  - name: Lancement des services RabbitMQ
+    service: 
+      name: "rabbitmq-server"
+      state: started
+      enabled: yes

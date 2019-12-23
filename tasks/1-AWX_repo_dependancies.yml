@@ -1,0 +1,53 @@
+---
+
+- hosts: localhost
+  tasks:
+  
+  - name: Installation des dependances
+    yum:
+      name:
+        - "policycoreutils-python"
+        - "epel-release"
+        - "wget"
+      state: present 
+      
+  - name: Autorisation du traffic tcp 8050 a 8052
+    seport:
+      ports: 8050-8052
+      proto: tcp
+      setype: http_port_t
+      state: present
+  
+  - name: httpd_can_network flag 
+    seboolean: 
+      name: httpd_can_network_connect
+      state: yes
+      persistent: yes
+      
+  - name: Firewall rule
+    firewalld:
+      service: http
+      permanent: yes
+      state: enabled
+
+  - name: Installation des dependances
+    yum:
+      name:
+        - "centos-release-scl"
+        - "centos-release-scl-rh"
+      state: present 
+
+  - name: Copie du repository AWX
+    copy:
+      src: "/etc/ansible/roles/AWX_Install/templates/awx-rpm.repo"
+      dest: "/etc/yum.repos.d/awx-rpm.repo"
+      
+  - name: Copie du repository RabbitMQ 
+    copy:
+      src: "/etc/ansible/roles/AWX_Install/templates/rabbitmq.repo"
+      dest: "/etc/yum.repos.d/rabbitmq.repo"
+
+  - name: Copie du repository Erlang
+    copy:
+      src: "/etc/ansible/roles/AWX_Install/templates/rabbitmq-erlang.repo"
+      dest: "/etc/yum.repos.d/rabbitmq-erlang.repo"
