@@ -7,7 +7,7 @@ You'll need to place the folder "AWX_Install" in /etc/ansible/roles/ for this to
 
 At this moment everything works except for "rh-python36*" installation. 
 
-So you'll need to do it manually. 
+So you'll need to do it manually. (see point number 5 on Wardeni's article) 
 
 This will be fixed in the future. 
 
@@ -20,4 +20,4 @@ https://raw.githubusercontent.com/faudeltn/AnsibleTower-awx/master/ansible-awx-i
 
 My contribution is just a simple Ansible script to install AWX and it's dependencies so you don't have to. 
 
-Special thanks to Mrmeee and Warden Lofti.
+Special thanks to Mrmeee and Warden Lofti for their contributions.
